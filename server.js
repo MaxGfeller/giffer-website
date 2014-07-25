@@ -18,3 +18,16 @@ var sock = shoe(function(stream) {
 })
 
 sock.install(server, '/giffer')
+
+// Instantiate giffer
+var giffer = new Giffer({
+    db: db,
+    outputDir: __dirname + '/public/images',
+    timeToRestart: 1000 * 60, // a minute pause
+    adapters: [ new Adapter9Gag({ maxPages: 100 }) ]
+})
+
+giffer.start()
+giffer.on('gif', function(filename) {
+    console.log(filename)
+})
