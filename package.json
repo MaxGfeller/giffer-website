@@ -29,8 +29,10 @@
     "giffer-adapter-twitter": "^0.4.0",
     "leveldown": "^0.10.2",
     "levelup": "^0.18.5",
+    "reconnect": "^2.0.1",
     "shoe": "0.0.15",
-    "st": "^0.5.1"
+    "st": "^0.5.1",
+    "through": "^2.3.4"
   },
   "devDependencies": {
     "browserify": "^4.2.3",
