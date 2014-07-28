@@ -29,7 +29,8 @@
     "giffer-adapter-twitter": "^0.4.0",
     "leveldown": "^0.10.2",
     "levelup": "^0.18.5",
-    "shoe": "0.0.15"
+    "shoe": "0.0.15",
+    "st": "^0.5.1"
   },
   "devDependencies": {
     "browserify": "^4.2.3",
