@@ -3,18 +3,19 @@ var shoe = require('shoe')
 var Giffer = require('giffer')
 var Adapter9Gag = require('giffer-adapter-9gag')
 var levelup = require('levelup')
+var st = require('st')
 
 var db = levelup(__dirname + '/db', { valueEncoding: 'json' })
 
-var server = http.createServer(function(req, res) {
-
-})
+var server = http.createServer(st(__dirname + '/public'))
 
 var port = process.env.PORT || 80
 server.listen(port)
 
-var sock = shoe(function(stream) {
+var streams = []
 
+var sock = shoe(function(s) {
+    streams.push(s)
 })
 
 sock.install(server, '/giffer')
@@ -29,5 +30,7 @@ var giffer = new Giffer({
 
 giffer.start()
 giffer.on('gif', function(filename) {
-    console.log(filename)
+    streams.forEach(function(s) {
+        s.write(filename)
+    })
 })
