@@ -22,7 +22,6 @@ var sock = shoe(function(s) {
         keys: false,
         values: true
     }).pipe(through(function(val) {
-        console.log(val.filename)
         this.emit('data', val.filename)
     })).pipe(s)
 })
