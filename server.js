@@ -4,6 +4,7 @@ var Giffer = require('giffer')
 var Adapter9Gag = require('giffer-adapter-9gag')
 var levelup = require('levelup')
 var st = require('st')
+var through = require('through')
 
 var db = levelup(__dirname + '/db', { valueEncoding: 'json' })
 
@@ -16,6 +17,14 @@ var streams = []
 
 var sock = shoe(function(s) {
     streams.push(s)
+
+    db.createReadStream({
+        keys: false,
+        values: true
+    }).pipe(through(function(val) {
+        console.log(val.filename)
+        this.emit('data', val.filename)
+    })).pipe(s)
 })
 
 sock.install(server, '/giffer')
