@@ -25,8 +25,8 @@
   "dependencies": {
     "giffer": "^1.0.0",
     "giffer-adapter-9gag": "^1.0.0",
-    "giffer-adapter-reddit": "^0.3.0",
-    "giffer-adapter-twitter": "^0.4.0",
+    "giffer-adapter-reddit": ">=0.3.0",
+    "giffer-adapter-twitter": ">=0.4.0",
     "leveldown": "^0.10.2",
     "levelup": "^0.18.5",
     "reconnect": "^2.0.1",

@@ -3,8 +3,11 @@ var shoe = require('shoe')
 
 reconnect(function(stream) {
     stream.on('data', function(filename) {
+        var a = document.createElement('a')
+        a.href = '#'
         var img = document.createElement('img')
         img.src = 'images/' + filename
-        document.body.insertBefore(img, document.body.firstChild)
+        a.appendChild(img)
+        document.body.insertBefore(a, document.body.firstChild)
     })
 }).connect('/giffer')

@@ -18,12 +18,12 @@ var streams = []
 var sock = shoe(function(s) {
     streams.push(s)
 
-    db.createReadStream({
-        keys: false,
-        values: true
-    }).pipe(through(function(val) {
-        this.emit('data', val.filename)
-    })).pipe(s)
+//    db.createReadStream({
+//        keys: false,
+//        values: true
+//    }).pipe(through(function(val) {
+//        this.emit('data', val.filename)
+//    })).pipe(s)
 })
 
 sock.install(server, '/giffer')
