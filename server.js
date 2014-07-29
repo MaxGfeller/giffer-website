@@ -8,7 +8,10 @@ var through = require('through')
 
 var db = levelup(__dirname + '/db', { valueEncoding: 'json' })
 
-var server = http.createServer(st(__dirname + '/public'))
+var server = http.createServer(st({
+    path: __dirname + '/public',
+    index: 'index.html'
+}))
 
 var port = process.env.PORT || 80
 server.listen(port)
