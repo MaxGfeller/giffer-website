@@ -1,25 +1,27 @@
-var http = require('http')
-var shoe = require('shoe')
-var Giffer = require('giffer')
-var Adapter9Gag = require('giffer-adapter-9gag')
-var levelup = require('levelup')
-var st = require('st')
-var through = require('through')
+var http = require('http');
+var shoe = require('shoe');
+var Giffer = require('giffer');
+var Adapter9Gag = require('giffer-adapter-9gag');
+var AdapterTwitter = require('giffer-adapter-twitter');
+var AdapterReddit = require('giffer-adapter-reddit');
+var levelup = require('levelup');
+var st = require('st');
+var through = require('through');
 
-var db = levelup(__dirname + '/db', { valueEncoding: 'json' })
+var db = levelup(__dirname + '/db', { valueEncoding: 'json' });
 
 var server = http.createServer(st({
     path: __dirname + '/public',
     index: 'index.html'
-}))
+}));
 
-var port = process.env.PORT || 80
-server.listen(port)
+var port = process.env.PORT || 80;
+server.listen(port);
 
-var streams = []
+var streams = [];
 
 var sock = shoe(function(s) {
-    streams.push(s)
+    streams.push(s);
 
 //    db.createReadStream({
 //        keys: false,
@@ -27,21 +29,36 @@ var sock = shoe(function(s) {
 //    }).pipe(through(function(val) {
 //        this.emit('data', val.filename)
 //    })).pipe(s)
-})
+});
 
-sock.install(server, '/giffer')
+sock.install(server, '/giffer');
 
 // Instantiate giffer
 var giffer = new Giffer({
     db: db,
     outputDir: __dirname + '/public/images',
     timeToRestart: 1000 * 60, // a minute pause
-    adapters: [ new Adapter9Gag({ maxPages: 100 }) ]
-})
+    adapters: [
+      new Adapter9Gag({ maxPages: 100 }),
+      new AdapterTwitter({
+        'path': 'statuses/filter',
+        'query': {follow: [256099675, 1019188722]}
+      }),
+      new AdapterReddit({
+        'subreddit': 'funny',
+        'sorting': 'hot',
+        'limit': 100,
+        'max_attempts': 5,
+        'poll_interval': 5000,
+        'items_to_get': 2000,
+        'image_types': 'gif'
+      })
+    ]
+});
 
-giffer.start()
+giffer.start();
 giffer.on('gif', function(filename) {
     streams.forEach(function(s) {
-        s.write(filename)
-    })
-})
+        s.write(filename);
+    });
+});

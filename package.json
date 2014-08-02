@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-js": "watchify public/app.js -o public/static/bundle.js",
+    "watch-js": "watchify public/app.js -o public/static/bundle.js -d",
+    "build-js": "browserify public/app.js > public/static/bundle.js -d",
     "watch-css": "catw public/assets/style.css -o public/static/bundle.css"
   },
   "repository": {
@@ -17,6 +18,12 @@
     "gif"
   ],
   "author": "Max Gfeller <max.gfeller@gmail.com>",
+  "contributors": [
+    {
+      "name": "Gordon Mickel",
+      "email": "gordon.mickel@gmail.com"
+    }
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/MaxGfeller/giffer-website/issues"
