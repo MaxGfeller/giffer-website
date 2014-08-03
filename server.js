@@ -22,7 +22,6 @@ var streams = [];
 
 var sock = shoe(function(s) {
     streams.push(s);
-
 //    db.createReadStream({
 //        keys: false,
 //        values: true
@@ -37,6 +36,9 @@ sock.install(server, '/giffer');
 var giffer = new Giffer({
     db: db,
     outputDir: __dirname + '/public/images',
+    thumbDir: 'thumbs',
+    thumbnailWidth: '200',
+    thumbnailHeight: '200',
     timeToRestart: 1000 * 60, // a minute pause
     adapters: [
       new Adapter9Gag({ maxPages: 100 }),

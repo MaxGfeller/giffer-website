@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/MaxGfeller/giffer-website",
   "dependencies": {
-    "giffer": "^1.0.0",
+    "giffer": "gmickel/giffer",
     "giffer-adapter-9gag": "^1.0.0",
     "giffer-adapter-reddit": ">=0.3.0",
     "giffer-adapter-twitter": ">=0.4.0",
