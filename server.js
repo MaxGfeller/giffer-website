@@ -50,7 +50,8 @@ var giffer = new Giffer({
       new Adapter9Gag({ maxPages: 100 }),
       new AdapterTwitter({
         'path': 'statuses/filter',
-        'query': {follow: [256099675, 1019188722, 223019569]}
+        'query': {follow: [256099675, 1019188722, 223019569]},
+        'image_types': 'gif'
       }),
       new AdapterReddit({
         'subreddit': 'funny',
