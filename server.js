@@ -16,6 +16,12 @@ var server = http.createServer(st({
 }));
 
 var port = process.env.PORT || 80;
+
+// temp fix
+process.on('uncaughtException', function(err) {
+  console.error(err.stack);
+});
+
 server.listen(port);
 
 var streams = [];
