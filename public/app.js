@@ -5,6 +5,7 @@ reconnect(function(stream) {
     stream.on('data', function(filename) {
         var div = document.getElementById('gifs');
         document.body.appendChild(div);
+        var divCentered = document.createElement('div');
         var a = document.createElement('a');
         a.className = 'fancybox-thumb';
         a.rel = 'fancybox-thumb';
@@ -12,7 +13,8 @@ reconnect(function(stream) {
         var img = document.createElement('img');
         img.src = 'images/thumbs/' + filename;
         a.appendChild(img);
-        div.appendChild(a);
+        divCentered.appendChild(a);
+        div.appendChild(divCentered);
     });
 }).connect('/giffer');
 

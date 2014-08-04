@@ -1,0 +1,16 @@
+#gifs div {
+    height: 200px;
+    width: 200px;
+    float: left;
+    margin: 2px;
+    border: 1px solid #3e3e3e;
+    position: relative;
+}
+#gifs div img {
+    height: 200px; /* Set your own height: percents, ems, whatever! */
+    width: 200px; /* Set your own width: percents, ems, whatever! */
+    overflow: auto; /* Recommended in case content is larger than the container */
+    margin: auto; /* Center the item vertically & horizontally */
+    position: absolute; /* Break it out of the regular flow */
+    top: 0; left: 0; bottom: 0; right: 0; /* Set the bounds in which to center it, relative to its parent/container */
+}
