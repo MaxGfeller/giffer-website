@@ -47,7 +47,7 @@ var giffer = new Giffer({
     thumbnailHeight: '200',
     timeToRestart: 1000 * 60, // a minute pause
     adapters: [
-      new Adapter9Gag({ maxPages: 100 }),
+      new Adapter9Gag({ maxPages: 20 }),
       new AdapterTwitter({
         'path': 'statuses/filter',
         'query': {follow: [256099675, 1019188722, 223019569]},
