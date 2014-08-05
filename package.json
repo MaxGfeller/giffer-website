@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch-js": "watchify public/app.js -o public/static/bundle.js -d",
     "build-js": "browserify public/app.js > public/static/bundle.js -d",
-    "watch-css": "catw public/assets/style.css -o public/static/bundle.css"
+    "watch-css": "catw public/assets/style.css -o public/static/bundle.css",
+    "remove-images": "rm -r public/images/*.gif && rm -r public/images/thumbs/*.gif && rm -r db/*"
   },
   "repository": {
     "type": "git",
