@@ -8,7 +8,7 @@ reconnect(function(stream) {
         var divCentered = document.createElement('div');
         var a = document.createElement('a');
         a.className = 'fancybox-thumb';
-        a.rel = 'fancybox-thumb';
+        a.rel = 'fancybox-button';
         a.href = 'images/' + filename;
         var img = document.createElement('img');
         img.src = 'images/thumbs/' + filename;
@@ -20,15 +20,22 @@ reconnect(function(stream) {
 
 $(document).ready(function() {
   $(".fancybox-thumb").fancybox({
+    afterLoad: function() {
+      this.title = 'Put source and stuff here' + this.title;
+    },
+    openEffect	: 'elastic',
+    closeEffect	: 'elastic',
     prevEffect	: 'none',
     nextEffect	: 'none',
+    closeBtn		: false,
     helpers	: {
       title	: {
-        type: 'outside'
+        type: 'inside'
       },
+      buttons: {},
       thumbs	: {
-        width	: 200,
-        height	: 200
+        width	: 150,
+        height	: 150
       },
       padding : 0
     }

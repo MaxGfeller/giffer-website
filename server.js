@@ -61,25 +61,7 @@ var giffer = new Giffer({
         'poll_interval': 5000,
         'items_to_get': 2000,
         'image_types': 'gif'
-      }),
-      new AdapterReddit({
-        'subreddit': 'funnygifs',
-        'sorting': 'hot',
-        'limit': 100,
-        'max_attempts': 5,
-        'poll_interval': 5000,
-        'items_to_get': 2000,
-        'image_types': 'gif'
-      }),
-      new AdapterReddit({
-        'subreddit': 'wtf_gifs',
-        'sorting': 'hot',
-        'limit': 100,
-        'max_attempts': 5,
-        'poll_interval': 5000,
-        'items_to_get': 2000,
-        'image_types': 'gif'
-      }),
+      })
     ]
 });
 
