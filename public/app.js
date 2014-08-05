@@ -1,21 +1,33 @@
 var reconnect = require('reconnect/shoe');
 var shoe = require('shoe');
+var dnode = require('dnode');
 
-reconnect(function(stream) {
-    stream.on('data', function(filename) {
+var addGif = function(name) {
         var div = document.getElementById('gifs');
         document.body.appendChild(div);
         var divCentered = document.createElement('div');
         var a = document.createElement('a');
         a.className = 'fancybox-thumb';
         a.rel = 'fancybox-button';
-        a.href = 'images/' + filename;
+        a.href = 'images/' + name;
         var img = document.createElement('img');
-        img.src = 'images/thumbs/' + filename;
+        img.src = 'images/thumbs/' + name;
         a.appendChild(img);
         divCentered.appendChild(a);
         div.appendChild(divCentered);
+}
+
+reconnect(function(stream) {
+    var d = dnode();
+
+    d.on('remote', function(remote) {
+        remote.getPage(null, function(err, result) {
+            result.gifs.forEach(function(gif) {
+                addGif(gif);
+            })
+        })
     });
+    d.pipe(stream).pipe(d);
 }).connect('/giffer');
 
 $(document).ready(function() {
@@ -41,4 +53,3 @@ $(document).ready(function() {
     }
   });
 });
-
