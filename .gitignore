@@ -2,3 +2,4 @@ node_modules/
 public/images/*.gif
 public/images/thumbs/*.gif
 db/
+config.js

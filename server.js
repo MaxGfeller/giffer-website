@@ -2,13 +2,14 @@ var http = require('http');
 var shoe = require('shoe');
 var Giffer = require('giffer');
 var Adapter9Gag = require('giffer-adapter-9gag');
-// var AdapterTwitter = require('giffer-adapter-twitter');
+var AdapterTwitter = require('giffer-adapter-twitter');
 var AdapterReddit = require('giffer-adapter-reddit');
 var levelup = require('levelup');
 var st = require('st');
 var through = require('through');
 var dnode = require('dnode');
 var concat = require('concat-stream');
+var adapterConfig = require('./config');
 
 var db = levelup(__dirname + '/db', { valueEncoding: 'json' });
 
@@ -34,26 +35,29 @@ var streams = [];
 var giffer = new Giffer({
     db: db,
     outputDir: __dirname + '/public/images',
-    // thumbDir: 'thumbs',
-    // thumbnailWidth: '200',
-    // thumbnailHeight: '200',
+    thumbnailDir: __dirname + '/public/images/thumbs',
+    thumbnailHeight: 200,
+    thumbnailWidth: 200,
+    createThumbnails: true,
     timeToRestart: 1000 * 60, // a minute pause
     adapters: [
-      new Adapter9Gag({ maxPages: 20 }),
-    //   new AdapterTwitter({
-    //     'path': 'statuses/filter',
-    //     'query': {follow: [256099675, 1019188722, 223019569]},
-    //     'image_types': 'gif'
-    //   }),
-      new AdapterReddit({
-        'subreddit': 'funnygifs',
-        'sorting': 'hot',
-        'limit': 100,
-        'max_attempts': 5,
-        'poll_interval': 5000,
-        'items_to_get': 2000,
-        'image_types': 'gif'
-      })
+        new Adapter9Gag({ maxPages: 20 }),
+        new AdapterTwitter({
+         'config': adapterConfig.twitter,
+         'path': 'statuses/filter',
+         'query': {follow: [256099675, 1019188722, 223019569]},
+         'image_types': 'gif'
+        }),
+        new AdapterReddit({
+         'config': adapterConfig.reddit,
+         'subreddit': 'funny',
+         'sorting': 'hot',
+         'limit': 100,
+         'max_attempts': 5,
+         'poll_interval': 5000,
+         'items_to_get': 2000,
+         'image_types': 'gif'
+        })
     ]
 });
 
