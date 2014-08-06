@@ -59,14 +59,13 @@ var giffer = new Giffer({
 
 
 var sock = shoe(function(s) {
-    streams.push(s);
     var d = dnode({
         getPage: function(start, cb) {
             if(!start || start === 0) start = Date.now();
 
             giffer.seqDb.createReadStream({
                 lte: start,
-                limit: 41,
+                limit: 61,
                 reverse: true
             }).pipe(through(function(val) {
                 giffer.urlDb.get(val.value, function(err, value) {
