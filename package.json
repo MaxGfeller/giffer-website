@@ -33,7 +33,7 @@
   "dependencies": {
     "concat-stream": "^1.4.6",
     "dnode": "^1.2.0",
-    "giffer": "1.*",
+    "giffer": "git://github.com/gmickel/giffer.git#thumbnails",
     "giffer-adapter-9gag": "^1.0.0",
     "giffer-adapter-reddit": ">=0.3.0",
     "giffer-adapter-twitter": ">=0.4.0",
