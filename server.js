@@ -83,15 +83,19 @@ var sock = shoe(function(s) {
                 }
 
                 gifs.map(function(gif) {
-                    if(parseInt(gif.key) < obj.next) obj.next = parseInt(gif.key);
+                    if(parseInt(gif.key) < obj.next) obj.next = parseInt(gif.key) - 1;
 
                     obj.gifs.push(gif.filename)
                 });
+                if(obj.next === 999999999999999) obj.next = null;
 
                 cb(null, obj);
             }));
         }
     });
+    d.on('remote', function(remote) {
+        streams.push(remote)
+    })
     d.pipe(s).pipe(d);
 });
 
@@ -99,7 +103,7 @@ sock.install(server, '/giffer');
 
 giffer.start();
 giffer.on('gif', function(filename) {
-    streams.forEach(function(s) {
-        // s.write(filename);
+    streams.forEach(function(r) {
+        r.addGif(filename)
     });
 });
