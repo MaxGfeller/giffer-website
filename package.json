@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-js": "watchify public/app.js -o public/static/bundle.js -d",
-    "build-js": "browserify public/app.js > public/static/bundle.js -d",
+    "watch-js": "watchify frontend/app.js -t brfs -o public/static/bundle.js -d",
+    "build-js": "browserify frontend/app.js > public/static/bundle.js -d",
     "watch-css": "catw public/assets/style.css -o public/static/bundle.css",
     "remove-images": "rm -r public/images/*.gif && rm -r public/images/thumbs/*.gif && rm -r db/*"
   },
@@ -31,12 +31,14 @@
   },
   "homepage": "https://github.com/MaxGfeller/giffer-website",
   "dependencies": {
+    "brfs": "^1.2.0",
     "concat-stream": "^1.4.6",
     "dnode": "^1.2.0",
     "giffer": "1.*",
     "giffer-adapter-9gag": "^1.0.0",
     "giffer-adapter-reddit": ">=0.3.0",
     "giffer-adapter-twitter": ">=0.4.0",
+    "hyperglue": "^1.3.1",
     "leveldown": "^0.10.2",
     "levelup": "^0.18.5",
     "reconnect": "^2.0.1",
