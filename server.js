@@ -14,7 +14,8 @@ var db = levelup(__dirname + '/db', { valueEncoding: 'json' });
 
 var server = http.createServer(st({
     path: __dirname + '/public',
-    index: 'index.html'
+    index: 'index.html',
+    cache: false
 }));
 
 var port = process.env.PORT || 80;
