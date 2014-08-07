@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch-js": "watchify frontend/app.js -t brfs -o public/static/bundle.js -d",
-    "build-js": "browserify frontend/app.js > public/static/bundle.js -d",
+    "build-js": "browserify frontend/app.js -t brfs > public/static/bundle.js -d",
     "watch-css": "catw public/assets/style.css -o public/static/bundle.css",
-    "remove-images": "rm -r public/images/*.gif && rm -r public/images/thumbs/*.gif && rm -r db/*"
+    "remove-images": "rm -rf public/images/*.gif && rm -rf public/images/thumbs/*.gif && rm -rf db/*"
   },
   "repository": {
     "type": "git",
