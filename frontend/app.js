@@ -17,7 +17,7 @@ var addGif = function(name) {
 
         var el = hyperglue(gifHtml, {
             'a': { href: 'images/' + name },
-            'img': { src: 'images/' + name }
+            'img': { src: 'images/thumbs/' + name }
         });
 
         var div = document.getElementById('gifs');

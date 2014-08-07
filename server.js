@@ -1,6 +1,7 @@
 var http = require('http');
 var shoe = require('shoe');
 var Giffer = require('giffer');
+var thumbnailer = require('giffer-thumbnail');
 var Adapter9Gag = require('giffer-adapter-9gag');
 var AdapterTwitter = require('giffer-adapter-twitter');
 var AdapterReddit = require('giffer-adapter-reddit');
@@ -35,10 +36,6 @@ var streams = [];
 var giffer = new Giffer({
     db: db,
     outputDir: __dirname + '/public/images',
-    thumbnailDir: __dirname + '/public/images/thumbs',
-    thumbnailHeight: 200,
-    thumbnailWidth: 200,
-    createThumbnails: true,
     timeToRestart: 1000 * 60, // a minute pause
     adapters: [
         new Adapter9Gag({ maxPages: 20 }),
@@ -60,6 +57,14 @@ var giffer = new Giffer({
         })
     ]
 });
+
+var thumbnailerOptions = {
+  outputDir : __dirname + '/public/images/thumbs',
+  width : 200,
+  height : 200
+};
+thumbnailer(giffer, thumbnailerOptions);
+
 
 
 var sock = shoe(function(s) {
