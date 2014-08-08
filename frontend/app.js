@@ -72,7 +72,15 @@ window.addEventListener('scroll', function(evt) {
     }
 });
 
-$(document).ready(function() {
+baguetteBox.run('#gifs', {
+  captions: true,       // true|false - Display image captions
+  buttons: 'auto',      // 'auto'|true|false - Display buttons
+  async: true,         // true|false - Load files asynchronously
+  preload: 1,           // [number] - How many files should be preloaded from current image
+  animation: 'slideIn'  // 'slideIn'|'fadeIn' - Animation type
+});
+
+/*$(document).ready(function() {
   $(".fancybox-thumb").fancybox({
     afterLoad: function() {
       this.title = 'Put source and stuff here' + this.title;
@@ -95,3 +103,4 @@ $(document).ready(function() {
     }
   });
 });
+*/
