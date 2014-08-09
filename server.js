@@ -69,9 +69,9 @@ var giffer = new Giffer({
 });
 
 var thumbnailerOptions = {
-  outputDir : __dirname + '/public/images/thumbs',
-  width : 200,
-  height : 200
+  outputDir: __dirname + '/public/images/thumbs',
+  width: 200,
+  height: 200
 };
 thumbnailer(giffer, thumbnailerOptions);
 
@@ -80,7 +80,7 @@ thumbnailer(giffer, thumbnailerOptions);
 var sock = shoe(function(s) {
     var d = dnode({
         getPage: function(start, cb) {
-            if(!start || start === 0) start = Date.now();
+            if (!start || start === 0) start = Date.now();
 
             giffer.seqDb.createReadStream({
                 lte: start,
@@ -88,33 +88,33 @@ var sock = shoe(function(s) {
                 reverse: true
             }).pipe(through(function(val) {
                 giffer.urlDb.get(val.value, function(err, value) {
-                    if(err) throw err;
+                    if (err) throw err;
 
                     this.emit('data', {
                         key: val.key,
                         filename: value.filename
-                    })
-                }.bind(this))
+                    });
+                }.bind(this));
             })).pipe(concat(function(gifs) {
                 var obj = {
                     next: 999999999999999,
                     gifs: []
-                }
+                };
 
                 gifs.map(function(gif) {
-                    if(parseInt(gif.key) < obj.next) obj.next = parseInt(gif.key) - 1;
+                    if (parseInt(gif.key) < obj.next) obj.next = parseInt(gif.key) - 1;
 
-                    obj.gifs.push(gif.filename)
+                    obj.gifs.push(gif.filename);
                 });
-                if(obj.next === 999999999999999) obj.next = null;
+                if (obj.next === 999999999999999) obj.next = null;
 
                 cb(null, obj);
             }));
         }
     });
     d.on('remote', function(remote) {
-        streams.push(remote)
-    })
+        streams.push(remote);
+    });
     d.pipe(s).pipe(d);
 });
 
@@ -123,6 +123,6 @@ sock.install(server, '/giffer');
 giffer.start();
 giffer.on('gif', function(filename) {
     streams.forEach(function(r) {
-        r.addGif(filename)
+        r.addGif(filename);
     });
 });

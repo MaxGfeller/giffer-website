@@ -9,27 +9,42 @@ var nextPage = null;
 var fetching = false;
 var waiting = [];
 
+var html = [
+  '<a class="fancybox-thumb" rel="fancybox-button">',
+    '<img>',
+    '</a>',
+    '</div>'
+].join('\n');
+
 var addGif = function(name) {
-        if(frames.top.scrollY > 30) {
+        if (frames.top.scrollY > 30) {
             waiting.push(name);
             return;
         }
 
-        var el = hyperglue(gifHtml, {
-            'a': { href: 'images/' + name },
-            'img': { src: 'images/thumbs/' + name }
+        var el = hyperglue(html, {
+            'a.fancybox-thumb': { href: 'images/' + name, title: 'bla' },
+            'a img': { src: 'images/thumbs/' + name }
         });
 
         var div = document.getElementById('gifs');
         div.insertBefore(el, div.firstChild);
-}
+
+        baguetteBox.run('#gifs', {
+          captions: true,       // true|false - Display image captions
+          buttons: 'auto',      // 'auto'|true|false - Display buttons
+          async: false,         // true|false - Load files asynchronously
+          preload: 0,           // [number] - How many files should be preloaded from current image
+          animation: 'fadeIn'  // 'slideIn'|'fadeIn' - Animation type
+        });
+};
 
 reconnect(function(stream) {
     var d = dnode({
         addGif: function(gif) {
             console.log(document.getElementById('gifs').scrollTop);
             console.log('add gif', gif);
-            addGif(gif)
+            addGif(gif);
         }
     });
 
@@ -38,9 +53,9 @@ reconnect(function(stream) {
         remote.getPage(null, function(err, result) {
             result.gifs.forEach(function(gif) {
                 addGif(gif);
-            })
+            });
             nextPage = result.next;
-        })
+        });
     });
     d.pipe(stream).pipe(d);
 }).connect('/giffer');
@@ -49,7 +64,7 @@ window.addEventListener('scroll', function(evt) {
     // if y < 30 display new gifs
     var y = evt.pageY;
 
-    if(y === 0) {
+    if (y === 0) {
         waiting.map(function(gif) {
             addGif(gif);
         });
@@ -58,26 +73,18 @@ window.addEventListener('scroll', function(evt) {
 
     var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
     var scrolledToBottom = (scrollTop + window.innerHeight) >= document.body.scrollHeight;
-    if(scrolledToBottom && fetching === false) {
-        if(nextPage === null) return;
+    if (scrolledToBottom && fetching === false) {
+        if (nextPage === null) return;
 
         fetching = true;
         r.getPage(nextPage, function(err, result) {
             nextPage = result.next;
             result.gifs.forEach(function(gif) {
                 addGif(gif);
-            })
+            });
             fetching = false;
-        })
+        });
     }
-});
-
-baguetteBox.run('#gifs', {
-  captions: true,       // true|false - Display image captions
-  buttons: 'auto',      // 'auto'|true|false - Display buttons
-  async: true,         // true|false - Load files asynchronously
-  preload: 1,           // [number] - How many files should be preloaded from current image
-  animation: 'slideIn'  // 'slideIn'|'fadeIn' - Animation type
 });
 
 /*$(document).ready(function() {
