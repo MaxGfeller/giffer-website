@@ -10,10 +10,11 @@ var fetching = false;
 var waiting = [];
 
 var html = [
-  '<a class="fancybox-thumb" rel="fancybox-button">',
+  '<span>',
+  '<a>',
     '<img>',
-    '</a>',
-    '</div>'
+  '</a>',
+  '</span>'
 ].join('\n');
 
 var addGif = function(name) {
@@ -22,21 +23,15 @@ var addGif = function(name) {
             return;
         }
 
+  //<a href="some-image.jpg" data-mfp-src="image-for-popup.jpg">Open image</a>
+
         var el = hyperglue(html, {
-            'a.fancybox-thumb': { href: 'images/' + name, title: 'bla' },
+            'a': { href: 'images/' + name, title: 'Caption' },
             'a img': { src: 'images/thumbs/' + name }
         });
 
         var div = document.getElementById('gifs');
         div.insertBefore(el, div.firstChild);
-
-        baguetteBox.run('#gifs', {
-          captions: true,       // true|false - Display image captions
-          buttons: 'auto',      // 'auto'|true|false - Display buttons
-          async: false,         // true|false - Load files asynchronously
-          preload: 0,           // [number] - How many files should be preloaded from current image
-          animation: 'fadeIn'  // 'slideIn'|'fadeIn' - Animation type
-        });
 };
 
 reconnect(function(stream) {
@@ -111,3 +106,23 @@ window.addEventListener('scroll', function(evt) {
   });
 });
 */
+
+$(document).ready(function() {
+  $('#gifs').magnificPopup({
+    delegate: 'a', // child items selector, by clicking on it popup will open
+    type: 'image',
+    gallery: {
+      enabled: true, // set to true to enable gallery
+
+      preload: [0,2], // read about this option in next Lazy-loading section
+
+      navigateByImgClick: true,
+
+      arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
+
+      tPrev: 'Previous (Left arrow key)', // title for left button
+      tNext: 'Next (Right arrow key)', // title for right button
+      tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
+    }
+  });
+});

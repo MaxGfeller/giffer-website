@@ -71,7 +71,8 @@ var giffer = new Giffer({
 var thumbnailerOptions = {
   outputDir: __dirname + '/public/images/thumbs',
   width: 200,
-  height: 200
+  height: 200,
+  resizeOpts: '>'
 };
 thumbnailer(giffer, thumbnailerOptions);
 
