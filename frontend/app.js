@@ -9,13 +9,7 @@ var nextPage = null;
 var fetching = false;
 var waiting = [];
 
-var html = [
-  '<span>',
-  '<a>',
-    '<img>',
-  '</a>',
-  '</span>'
-].join('\n');
+var html = fs.readFileSync(__dirname + '/gif-element.html', { encoding: 'utf8' });
 
 var prependGifElement = function(el) {
     var div = document.getElementById('gifs');
