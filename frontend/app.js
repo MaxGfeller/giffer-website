@@ -37,7 +37,10 @@ document.getElementById('displayNewGifs').addEventListener('click', function() {
     while(waiting.length > 0) {
         var gif = waiting.pop();
         addGif(gif, true);
+        document.getElementById('numOfGifs').textContent = waiting.length;
     }
+    document.getElementById('displayNewGifs').style.display = 'none';
+
 });
 
 reconnect(function(stream) {
