@@ -45,7 +45,7 @@ reconnect(function(stream) {
         addGif: function(gif) {
             waiting.push(gif);
 
-            document.getElementById('numOfGifs').text = waiting.length;
+            document.getElementById('numOfGifs').textContent = waiting.length;
             document.getElementById('displayNewGifs').style.display = 'block';
         }
     });
