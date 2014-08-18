@@ -11,6 +11,7 @@ var through = require('through');
 var dnode = require('dnode');
 var concat = require('concat-stream');
 var adapterConfig = require('./config');
+var validator = require('giffer-validator');
 
 var db = levelup(__dirname + '/db', { valueEncoding: 'json' });
 
@@ -75,7 +76,7 @@ var thumbnailerOptions = {
   resizeOpts: '>'
 };
 thumbnailer(giffer, thumbnailerOptions);
-
+validator(giffer);
 
 
 var sock = shoe(function(s) {
@@ -103,7 +104,8 @@ var sock = shoe(function(s) {
                 };
 
                 gifs.map(function(gif) {
-                    if (parseInt(gif.key) < obj.next) obj.next = parseInt(gif.key) - 1;
+                    if (parseInt(gif.key) < obj.next)
+                        obj.next = parseInt(gif.key) - 1;
 
                     obj.gifs.push(gif.filename);
                 });
