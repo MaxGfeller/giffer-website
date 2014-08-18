@@ -4,3 +4,5 @@ public/images/*.gif
 public/images/thumbs/*.gif
 db/
 config.js
+public/static/bundle.js
+public/static/bundle.css
