@@ -21,19 +21,32 @@ var appendGifElement = function(el) {
     div.appendChild(el);
 }
 
-var addGif = function(name) {
+var addGif = function(name, prepend) {
     var el = hyperglue(html, {
-        'a': { href: 'images/' + name, title: 'Caption' },
         'a img': { src: 'images/thumbs/' + name }
     });
+    el.href = 'images/' + name;
+    el.title = 'Caption'
+
+    if(prepend) return prependGifElement(el);
 
     appendGifElement(el);
 };
 
+document.getElementById('displayNewGifs').addEventListener('click', function() {
+    while(waiting.length > 0) {
+        var gif = waiting.pop();
+        addGif(gif, true);
+    }
+});
+
 reconnect(function(stream) {
     var d = dnode({
         addGif: function(gif) {
-            waiting.push(gif)
+            waiting.push(gif);
+
+            document.getElementById('numOfGifs').text = waiting.length;
+            document.getElementById('displayNewGifs').style.display = 'block';
         }
     });
 
