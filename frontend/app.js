@@ -17,29 +17,29 @@ var html = [
   '</span>'
 ].join('\n');
 
+var prependGifElement = function(el) {
+    var div = document.getElementById('gifs');
+    div.insertBefore(el, div.firstChild);
+}
+
+var appendGifElement = function(el) {
+    var div = document.getElementById('gifs');
+    div.appendChild(el);
+}
+
 var addGif = function(name) {
-        if (frames.top.scrollY > 30) {
-            waiting.push(name);
-            return;
-        }
+    var el = hyperglue(html, {
+        'a': { href: 'images/' + name, title: 'Caption' },
+        'a img': { src: 'images/thumbs/' + name }
+    });
 
-  //<a href="some-image.jpg" data-mfp-src="image-for-popup.jpg">Open image</a>
-
-        var el = hyperglue(html, {
-            'a': { href: 'images/' + name, title: 'Caption' },
-            'a img': { src: 'images/thumbs/' + name }
-        });
-
-        var div = document.getElementById('gifs');
-        div.insertBefore(el, div.firstChild);
+    appendGifElement(el);
 };
 
 reconnect(function(stream) {
     var d = dnode({
         addGif: function(gif) {
-            console.log(document.getElementById('gifs').scrollTop);
-            console.log('add gif', gif);
-            addGif(gif);
+            waiting.push(gif)
         }
     });
 
