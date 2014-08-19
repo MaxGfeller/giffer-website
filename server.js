@@ -21,12 +21,11 @@ var server = http.createServer(st({
     cache: false
 }));
 
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 3456;
 
 // temp fix
 process.on('uncaughtException', function(err) {
   console.error(err.stack);
-  process.exit();
 });
 
 server.listen(port);
@@ -101,10 +100,10 @@ var sock = shoe(function(s) {
             }).pipe(through(function(val) {
                 giffer.urlDb.get(val.value, function(err, value) {
                     if (err) throw err;
-
                     this.emit('data', {
                         key: val.key,
-                        filename: value.filename
+                        filename: value.filename,
+                        metadata: value.metadata
                     });
                 }.bind(this));
             })).pipe(concat(function(gifs) {
@@ -117,7 +116,7 @@ var sock = shoe(function(s) {
                     if (parseInt(gif.key) < obj.next)
                         obj.next = parseInt(gif.key) - 1;
 
-                    obj.gifs.push(gif.filename);
+                    obj.gifs.push(gif);
                 });
                 if (obj.next === 999999999999999) obj.next = null;
 
@@ -134,8 +133,8 @@ var sock = shoe(function(s) {
 sock.install(server, '/giffer');
 
 giffer.start();
-giffer.on('gif', function(filename) {
+giffer.on('gif', function(filename, metadata) {
     streams.forEach(function(r) {
-        r.addGif(filename);
+        r.addGif({'filename': filename, 'metadata': metadata}, false);
     });
 });

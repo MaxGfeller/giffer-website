@@ -14,27 +14,31 @@ var html = fs.readFileSync(__dirname + '/gif-element.html', { encoding: 'utf8' }
 var prependGifElement = function(el) {
     var div = document.getElementById('gifs');
     div.insertBefore(el, div.firstChild);
-}
+};
 
 var appendGifElement = function(el) {
     var div = document.getElementById('gifs');
     div.appendChild(el);
-}
+};
 
-var addGif = function(name, prepend) {
+var addGif = function(gif, prepend) {
+  console.log('gif', gif);
     var el = hyperglue(html, {
-        'a img': { src: 'images/thumbs/' + name }
+        'a img': {
+          src: 'images/thumbs/' + gif.filename,
+          title: gif.metadata.origin,
+          class: 'images'
+        }
     });
-    el.href = 'images/' + name;
-    el.title = 'Caption'
+    el.href = 'images/' + gif.filename;
 
-    if(prepend) return prependGifElement(el);
+    if (prepend) return prependGifElement(el);
 
     appendGifElement(el);
 };
 
 document.getElementById('displayNewGifs').addEventListener('click', function() {
-    while(waiting.length > 0) {
+    while (waiting.length > 0) {
         var gif = waiting.pop();
         addGif(gif, true);
         document.getElementById('numOfGifs').textContent = waiting.length;
@@ -46,8 +50,8 @@ document.getElementById('displayNewGifs').addEventListener('click', function() {
 reconnect(function(stream) {
     var d = dnode({
         addGif: function(gif) {
+          console.log('gif', gif);
             waiting.push(gif);
-
             document.getElementById('numOfGifs').textContent = waiting.length;
             document.getElementById('displayNewGifs').style.display = 'block';
         }
@@ -57,7 +61,7 @@ reconnect(function(stream) {
         r = remote;
         remote.getPage(null, function(err, result) {
             result.gifs.forEach(function(gif) {
-                addGif(gif);
+              addGif(gif, false);
             });
             nextPage = result.next;
         });
@@ -92,39 +96,21 @@ window.addEventListener('scroll', function(evt) {
     }
 });
 
-/*$(document).ready(function() {
-  $(".fancybox-thumb").fancybox({
-    afterLoad: function() {
-      this.title = 'Put source and stuff here' + this.title;
-    },
-    openEffect	: 'elastic',
-    closeEffect	: 'elastic',
-    prevEffect	: 'none',
-    nextEffect	: 'none',
-    closeBtn		: false,
-    helpers	: {
-      title	: {
-        type: 'inside'
-      },
-      buttons: {},
-      thumbs	: {
-        width	: 150,
-        height	: 150
-      },
-      padding : 0
-    }
-  });
-});
-*/
-
 $(document).ready(function() {
   $('#gifs').magnificPopup({
     delegate: 'a', // child items selector, by clicking on it popup will open
     type: 'image',
+    image: {
+      titleSrc: function(item) {
+        var link = item.el.querySelector('.images').attr('title');
+        console.log('link', link);
+        return '<a href="'+link+'">Source</a>';
+      }
+    },
     gallery: {
       enabled: true, // set to true to enable gallery
 
-      preload: [0,2], // read about this option in next Lazy-loading section
+      preload: [0, 2], // read about this option in next Lazy-loading section
 
       navigateByImgClick: true,
 
