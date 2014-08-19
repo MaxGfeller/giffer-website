@@ -22,15 +22,19 @@ var appendGifElement = function(el) {
 };
 
 var addGif = function(gif, prepend) {
-  console.log('gif', gif);
+  var sourceLink;
+  if(typeof gif.metadata !== "undefined") {
+    sourceLink = gif.metadata.origin;
+  } else {
+    sourceLink = "";
+  }
     var el = hyperglue(html, {
         'a img': {
-          src: 'images/thumbs/' + gif.filename,
-          title: gif.metadata.origin,
-          class: 'images'
+          src: 'images/thumbs/' + gif.filename
         }
     });
     el.href = 'images/' + gif.filename;
+    el.setAttribute('data-url', sourceLink);
 
     if (prepend) return prependGifElement(el);
 
@@ -50,7 +54,6 @@ document.getElementById('displayNewGifs').addEventListener('click', function() {
 reconnect(function(stream) {
     var d = dnode({
         addGif: function(gif) {
-          console.log('gif', gif);
             waiting.push(gif);
             document.getElementById('numOfGifs').textContent = waiting.length;
             document.getElementById('displayNewGifs').style.display = 'block';
@@ -102,8 +105,7 @@ $(document).ready(function() {
     type: 'image',
     image: {
       titleSrc: function(item) {
-        var link = item.el.querySelector('.images').attr('title');
-        console.log('link', link);
+        var link = item.el.attr('data-url');
         return '<a href="'+link+'">Source</a>';
       }
     },
