@@ -38,7 +38,7 @@ var giffer = new Giffer({
     outputDir: __dirname + '/public/images',
     timeToRestart: 1000 * 60, // a minute pause
     adapters: [
-      new Adapter9Gag({ maxPages: 20 }),
+      // new Adapter9Gag({ maxPages: 20 }),
       new AdapterTwitter({
        'config': adapterConfig.twitter,
        'path': 'statuses/filter',
