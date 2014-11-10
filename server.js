@@ -47,7 +47,7 @@ var giffer = new Giffer({
       }),
       new AdapterReddit({
        'config': adapterConfig.reddit,
-       'subreddit': 'funny',
+       'subreddit': 'funny_gifs',
        'sorting': 'hot',
        'limit': 100,
        'max_attempts': 5,
@@ -57,7 +57,7 @@ var giffer = new Giffer({
       }),
       new AdapterReddit({
        'config': adapterConfig.reddit,
-       'subreddit': 'gifs',
+       'subreddit': 'animalgifs',
        'sorting': 'hot',
        'limit': 100,
        'max_attempts': 5,
