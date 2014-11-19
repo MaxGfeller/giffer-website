@@ -1,140 +1,118 @@
 var http = require('http');
-var shoe = require('shoe');
 var Giffer = require('giffer');
 var thumbnailer = require('giffer-thumbnail');
-var Adapter9Gag = require('giffer-adapter-9gag');
-var AdapterTwitter = require('giffer-adapter-twitter');
-var AdapterReddit = require('giffer-adapter-reddit');
 var levelup = require('levelup');
 var st = require('st');
+var fs = require('fs');
 var through = require('through');
-var dnode = require('dnode');
 var concat = require('concat-stream');
-var adapterConfig = require('./config');
 var validator = require('giffer-validator');
+var hyperstream = require('hyperstream');
+var hyperglue = require('hyperglue');
+var adapters = require('./adapters');
+var url = require('url');
+var gifHtml = fs.readFileSync(__dirname + '/frontend/gif-element.html', {
+  encoding: 'utf8'
+});
 
 var db = levelup(__dirname + '/db', { valueEncoding: 'json' });
-
-var server = http.createServer(st({
+var mount = st({
     path: __dirname + '/public',
     index: 'index.html',
     cache: false
-}));
+});
+
+var giffer = new Giffer({
+    db: db,
+    outputDir: __dirname + '/public/images',
+    timeToRestart: 1000 * 60,
+    adapters: adapters
+});
+
+var server = http.createServer(function(req, res) {
+  var u = url.parse(req.url, true)
+  if(u.pathname == '/' || u.pathname == '/index.html') {
+    var start = Date.now();
+    createGifStream(start).pipe(res);
+    return;
+  }
+
+  if(u.pathname == '/page') {
+    var start = u.query.k || Date.now();
+    giffer.createSeqReadStream({
+      lte: start,
+      limit: 61,
+      reverse: true
+    }).pipe(through(function(o) {
+      var e = hyperglue(gifHtml, {
+        '.item': {
+          src: 'images/thumbs/' + o.filename
+        },
+        '.tile-inner': {
+          href: 'images/' + o.filename
+        },
+        '.tile': {
+          'data-key': o.key
+        }
+      })
+      this.queue(e.innerHTML)
+    })).pipe(res);
+    return;
+  }
+
+  mount(req, res);
+});
 
 var port = process.env.PORT || 3456;
 
-// temp fix
 process.on('uncaughtException', function(err) {
   console.error(err.stack);
+  process.exit();
 });
 
 server.listen(port);
 
-var streams = [];
-
-// Instantiate giffer
-var giffer = new Giffer({
-    db: db,
-    outputDir: __dirname + '/public/images',
-    timeToRestart: 1000 * 60, // a minute pause
-    adapters: [
-      new Adapter9Gag({ maxPages: 20 }),
-      new AdapterTwitter({
-       'config': adapterConfig.twitter,
-       'path': 'statuses/filter',
-       'query': {follow: [256099675, 1019188722, 223019569]},
-       'image_types': 'gif'
-      }),
-      new AdapterReddit({
-       'config': adapterConfig.reddit,
-       'subreddit': 'funny_gifs',
-       'sorting': 'hot',
-       'limit': 100,
-       'max_attempts': 5,
-       'poll_interval': 5000,
-       'items_to_get': 2000,
-       'image_types': 'gif'
-      }),
-      new AdapterReddit({
-       'config': adapterConfig.reddit,
-       'subreddit': 'animalgifs',
-       'sorting': 'hot',
-       'limit': 100,
-       'max_attempts': 5,
-       'poll_interval': 5000,
-       'items_to_get': 2000,
-       'image_types': 'gif'
-      }),
-      new AdapterReddit({
-        'config': adapterConfig.reddit,
-        'subreddit': 'funnygifs',
-        'sorting': 'hot',
-        'limit': 100,
-        'max_attempts': 5,
-        'poll_interval': 5000,
-        'items_to_get': 1000,
-        'image_types': 'gif'
-      })
-    ]
-});
-
 var thumbnailerOptions = {
   outputDir: __dirname + '/public/images/thumbs',
-  width: 200,
   height: 200,
   resizeOpts: '>'
 };
 thumbnailer(giffer, thumbnailerOptions);
 validator(giffer);
 
-
-var sock = shoe(function(s) {
-    var d = dnode({
-        getPage: function(start, cb) {
-            if (!start || start === 0) start = Date.now();
-
-            giffer.seqDb.createReadStream({
-                lte: start,
-                limit: 61,
-                reverse: true
-            }).pipe(through(function(val) {
-                giffer.urlDb.get(val.value, function(err, value) {
-                    if (err) throw err;
-                    this.emit('data', {
-                        key: val.key,
-                        filename: value.filename,
-                        metadata: value.metadata
-                    });
-                }.bind(this));
-            })).pipe(concat(function(gifs) {
-                var obj = {
-                    next: 999999999999999,
-                    gifs: []
-                };
-
-                gifs.map(function(gif) {
-                    if (parseInt(gif.key) < obj.next)
-                        obj.next = parseInt(gif.key) - 1;
-
-                    obj.gifs.push(gif);
-                });
-                if (obj.next === 999999999999999) obj.next = null;
-
-                cb(null, obj);
-            }));
-        }
-    });
-    d.on('remote', function(remote) {
-        streams.push(remote);
-    });
-    d.pipe(s).pipe(d);
-});
-
-sock.install(server, '/giffer');
-
 giffer.start();
 giffer.on('gif', function(filename, metadata) {
-    streams.forEach(function(r) {
-        r.addGif({'filename': filename, 'metadata': metadata}, false);
-    });
 });
+
+function createGifStream(start) {
+  var tr = through(function(o) {
+    var e = hyperglue(gifHtml, {
+      '.item': {
+        src: 'images/thumbs/' + o.filename
+      },
+      '.tile-inner': {
+        href: 'images/' + o.filename
+      },
+      '.tile': {
+        'data-key': o.key
+      }
+    })
+    this.queue(e.innerHTML)
+  })
+
+  var hs = hyperstream({
+    '#gifs': {
+      _appendHtml: tr
+    }
+  });
+
+  process.nextTick(function() {
+    giffer.createSeqReadStream({
+      lte: start,
+      limit: 61,
+      reverse: true
+    }).pipe(tr);
+  }.bind(this))
+
+  return fs.createReadStream(__dirname + '/public/index.html').pipe(hs)
+}
