@@ -3,24 +3,31 @@
 <head>
     <title>Gifster - All the funny gifs</title>
 
+    <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="assets/bootstrap.journal.min.css">
     <link type="text/css" href="static/bundle.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/magnific-popup.css">
+    <link rel="stylesheet" href="assets/ftg.css">
 </head>
 <body>
     <div class="page-header">
         <h1>Gifster <small>All the funny gifs</small></h1>
     </div>
     <div id="displayNewGifs" style="display: none;" class="alert alert-info" role="alert">
-        <a href="javascript:void(0)" class="alert-link">Display <span id="numOfGifs"></span> new GIF(s)!</a>
+        <a href="javascript:void(0)" class="alert-link">Display new GIFs!</a>
     </div>
-    <div id="gifs"></div>
+
+    <div id="gallery">
+      <div class="ftg-items" id="gifs">
+      </div>
+    </div>
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="assets/jquery.magnific-popup.min.js"></script>
-    <script type="text/javascript" src="assets/isotope.pkgd.min.js"></script>
-    <script type="text/javascript" src="static/bundle.js"></script>
+    <!-- // <script type="text/javascript" src="assets/masonry.pkgd.min.js"></script> -->
+    <script src="assets/jquery.finalTilesGallery.js"></script>
+    <!-- // <script type="text/javascript" src="static/bundle.js"></script> -->
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -30,12 +37,37 @@
         ga('create', 'UA-53521845-1', 'auto');
         ga('send', 'pageview');
     </script>
-    <script type="text/javascript">
-        var container = document.querySelector('#gifs');
-        var iso = new Isotope( container, {
-          itemSelector: '.gif',
-          layoutMode: 'fitRows'
+    <script type="text/javascript" charset="utf-8">
+      $(window).load(function() {
+        var k = $('#gifs .tile:last-child').data('key');
+        $('#gallery').finalTilesGallery({
+          autoLoadURL: '/page?k=' + k,
+          onUpdate: function() {
+            var k = $('#gifs .tile:last-child').data('key');
+            this.settings.autoLoadURL = '/page?k=' + k;
+          }
         });
+
+          $('#gifs').magnificPopup({
+            delegate: 'a', // child items selector, by clicking on it popup will open
+            type: 'image',
+            image: {
+              titleSrc: function(item) {
+                var link = item.el.attr('data-url');
+                return '<a href="'+link+'">Source</a>';
+              }
+            },
+            gallery: {
+              enabled: true, // set to true to enable gallery
+              preload: [0, 2], // read about this option in next Lazy-loading section
+              navigateByImgClick: true,
+              arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
+              tPrev: 'Previous (Left arrow key)', // title for left button
+              tNext: 'Next (Right arrow key)', // title for right button
+              tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
+            }
+          });
+      });
     </script>
 </body>
 </html>
