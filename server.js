@@ -1,12 +1,10 @@
 var http = require('http');
 var Giffer = require('giffer');
-var thumbnailer = require('giffer-thumbnail');
 var levelup = require('levelup');
 var st = require('st');
 var fs = require('fs');
 var through = require('through');
 var concat = require('concat-stream');
-var validator = require('giffer-validator');
 var hyperstream = require('hyperstream');
 var hyperglue = require('hyperglue');
 var adapters = require('./adapters');
@@ -77,8 +75,8 @@ var thumbnailerOptions = {
   height: 200,
   resizeOpts: '>'
 };
-thumbnailer(giffer, thumbnailerOptions);
-validator(giffer);
+giffer.plugin(require('giffer-thumbnail'), thumbnailerOptions);
+giffer.plugin(require('giffer-validator'));
 
 giffer.start();
 giffer.on('gif', function(filename, metadata) {
