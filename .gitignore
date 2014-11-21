@@ -6,3 +6,4 @@ db/
 config.js
 public/static/bundle.js
 public/static/bundle.css
+adapters.js
