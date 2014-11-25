@@ -39,6 +39,7 @@
     "giffer-adapter-9gag": "^1.0.0",
     "giffer-adapter-reddit": ">=0.3.0",
     "giffer-adapter-twitter": ">=0.4.0",
+    "giffer-md5-duplicates": "^1.0.0",
     "giffer-thumbnail": "^1.0.0",
     "giffer-validator": "^1.0.1",
     "hyperglue": "^1.3.1",
