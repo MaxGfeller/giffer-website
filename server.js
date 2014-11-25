@@ -77,6 +77,7 @@ var thumbnailerOptions = {
 };
 giffer.plugin(require('giffer-thumbnail'), thumbnailerOptions);
 giffer.plugin(require('giffer-validator'));
+giffer.plugin(require('giffer-md5-duplicates'));
 
 giffer.start();
 giffer.on('gif', function(filename, metadata) {
