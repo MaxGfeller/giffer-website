@@ -1206,8 +1206,8 @@
       }
     },
     "giffer-md5-duplicates": {
-      "version": "1.0.0",
-      "from": "giffer-md5-duplicates@*"
+      "version": "1.0.2",
+      "from": "giffer-md5-duplicates@1.0.2"
     },
     "giffer-thumbnail": {
       "version": "1.1.0",
