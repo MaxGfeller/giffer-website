@@ -1205,6 +1205,10 @@
         }
       }
     },
+    "giffer-md5-duplicates": {
+      "version": "1.0.0",
+      "from": "giffer-md5-duplicates@*"
+    },
     "giffer-thumbnail": {
       "version": "1.1.0",
       "from": "https://registry.npmjs.org/giffer-thumbnail/-/giffer-thumbnail-1.1.0.tgz",
