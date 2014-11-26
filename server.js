@@ -9,6 +9,8 @@ var hyperstream = require('hyperstream');
 var hyperglue = require('hyperglue');
 var adapters = require('./adapters');
 var url = require('url');
+var oppressor = require('oppressor');
+
 var gifHtml = fs.readFileSync(__dirname + '/frontend/gif-element.html', {
   encoding: 'utf8'
 });
@@ -31,7 +33,7 @@ var server = http.createServer(function(req, res) {
   var u = url.parse(req.url, true)
   if(u.pathname == '/' || u.pathname == '/index.html') {
     var start = Date.now();
-    createGifStream(start).pipe(res);
+    createGifStream(start).pipe(oppressor(req)).pipe(res);
     return;
   }
 
