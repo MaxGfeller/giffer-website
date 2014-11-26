@@ -2070,6 +2070,28 @@
         }
       }
     },
+    "oppressor": {
+      "version": "0.0.1",
+      "from": "oppressor@*",
+      "resolved": "https://registry.npmjs.org/oppressor/-/oppressor-0.0.1.tgz",
+      "dependencies": {
+        "through": {
+          "version": "0.1.4",
+          "from": "through@>=0.1.4 <0.2.0",
+          "resolved": "https://registry.npmjs.org/through/-/through-0.1.4.tgz"
+        },
+        "response-stream": {
+          "version": "0.0.0",
+          "from": "response-stream@>=0.0.0 <0.1.0",
+          "resolved": "https://registry.npmjs.org/response-stream/-/response-stream-0.0.0.tgz"
+        },
+        "negotiator": {
+          "version": "0.2.8",
+          "from": "negotiator@>=0.2.5 <0.3.0",
+          "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.2.8.tgz"
+        }
+      }
+    },
     "st": {
       "version": "0.5.2",
       "from": "https://registry.npmjs.org/st/-/st-0.5.2.tgz",

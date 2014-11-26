@@ -48,6 +48,7 @@
     "imagesloaded": "^3.1.8",
     "leveldown": "^0.10.2",
     "levelup": "^0.18.5",
+    "oppressor": "0.0.1",
     "st": "^0.5.1",
     "through": "https://registry.npmjs.org/through/-/through-2.3.6.tgz"
   },
