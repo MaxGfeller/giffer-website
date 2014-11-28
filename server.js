@@ -59,7 +59,7 @@ var server = http.createServer(function(req, res) {
         })
         this.queue(e.innerHTML)
       }.bind(this))
-    })).pipe(opressor(req)).pipe(res);
+    })).pipe(oppressor(req)).pipe(res);
     return;
   }
 
