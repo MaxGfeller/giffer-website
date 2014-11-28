@@ -44,18 +44,21 @@ var server = http.createServer(function(req, res) {
       limit: 61,
       reverse: true
     }).pipe(through(function(o) {
-      var e = hyperglue(gifHtml, {
-        '.item': {
-          src: 'images/thumbs/' + o.filename
-        },
-        '.tile-inner': {
-          href: 'images/' + o.filename
-        },
-        '.tile': {
-          'data-key': o.key
-        }
-      })
-      this.queue(e.innerHTML)
+      // include base64 src for thumbnail
+      fs.readFile(__dirname + '/public/images/thumbs/' + o.filename, function(buf) {
+        var e = hyperglue(gifHtml, {
+          '.item': {
+            src: 'data:image/png;base64,' + buf.toString('base64')
+          },
+          '.tile-inner': {
+            href: 'images/' + o.filename
+          },
+          '.tile': {
+            'data-key': o.key
+          }
+        })
+        this.queue(e.innerHTML)
+      }.bind(this))
     })).pipe(opressor(req)).pipe(res);
     return;
   }
@@ -87,18 +90,21 @@ giffer.on('gif', function(filename, metadata) {
 
 function createGifStream(start) {
   var tr = through(function(o) {
-    var e = hyperglue(gifHtml, {
-      '.item': {
-        src: 'images/thumbs/' + o.filename
-      },
-      '.tile-inner': {
-        href: 'images/' + o.filename
-      },
-      '.tile': {
-        'data-key': o.key
-      }
-    })
-    this.queue(e.innerHTML)
+    // include base64 src for thumbnail
+    fs.readFile(__dirname + '/public/images/thumbs/' + o.filename, function(err, buf) {
+      var e = hyperglue(gifHtml, {
+        '.item': {
+          src: 'data:image/png;base64,' + buf.toString('base64')
+        },
+        '.tile-inner': {
+          href: 'images/' + o.filename
+        },
+        '.tile': {
+          'data-key': o.key
+        }
+      })
+      this.queue(e.innerHTML)
+    }.bind(this))
   })
 
   var hs = hyperstream({
