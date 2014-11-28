@@ -39,27 +39,7 @@ var server = http.createServer(function(req, res) {
 
   if(u.pathname == '/page') {
     var start = u.query.k || Date.now();
-    giffer.createSeqReadStream({
-      lte: start,
-      limit: 61,
-      reverse: true
-    }).pipe(through(function(o) {
-      // include base64 src for thumbnail
-      fs.readFile(__dirname + '/public/images/thumbs/' + o.filename, function(err, buf) {
-        var e = hyperglue(gifHtml, {
-          '.item': {
-            src: 'data:image/png;base64,' + buf.toString('base64')
-          },
-          '.tile-inner': {
-            href: 'images/' + o.filename
-          },
-          '.tile': {
-            'data-key': o.key
-          }
-        })
-        this.queue(e.innerHTML)
-      }.bind(this))
-    })).pipe(oppressor(req)).pipe(res);
+    createGifStream(start).pipe(oppressor(req)).pipe(res);
     return;
   }
 
