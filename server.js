@@ -45,7 +45,7 @@ var server = http.createServer(function(req, res) {
       reverse: true
     }).pipe(through(function(o) {
       // include base64 src for thumbnail
-      fs.readFile(__dirname + '/public/images/thumbs/' + o.filename, function(buf) {
+      fs.readFile(__dirname + '/public/images/thumbs/' + o.filename, function(err, buf) {
         var e = hyperglue(gifHtml, {
           '.item': {
             src: 'data:image/png;base64,' + buf.toString('base64')
