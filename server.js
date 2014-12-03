@@ -33,13 +33,13 @@ var server = http.createServer(function(req, res) {
   var u = url.parse(req.url, true)
   if(u.pathname == '/' || u.pathname == '/index.html') {
     var start = Date.now();
-    createGifStream(start).pipe(oppressor(req)).pipe(res);
+    createGifStream(start).pipe(res);
     return;
   }
 
   if(u.pathname == '/page') {
     var start = u.query.k || Date.now();
-    createGifStream(start).pipe(oppressor(req)).pipe(res);
+    createGifStream(start).pipe(res);
     return;
   }
 
