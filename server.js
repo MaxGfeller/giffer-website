@@ -58,8 +58,10 @@ server.listen(port);
 var thumbnailerOptions = {
   outputDir: __dirname + '/public/images/thumbs',
   height: 200,
-  resizeOpts: '>'
+  resizeOpts: '>',
+  base64: true
 };
+
 giffer.plugin(require('giffer-thumbnail'), thumbnailerOptions);
 giffer.plugin(require('giffer-validator'));
 giffer.plugin(require('giffer-md5-duplicates'));
@@ -71,20 +73,18 @@ giffer.on('gif', function(filename, metadata) {
 function createGifStream(start) {
   var tr = through(function(o) {
     // include base64 src for thumbnail
-    fs.readFile(__dirname + '/public/images/thumbs/' + o.filename, function(err, buf) {
-      var e = hyperglue(gifHtml, {
-        '.item': {
-          src: 'data:image/png;base64,' + buf.toString('base64')
-        },
-        '.tile-inner': {
-          href: 'images/' + o.filename
-        },
-        '.tile': {
-          'data-key': o.key
-        }
-      })
-      this.queue(e.innerHTML)
-    }.bind(this))
+    var e = hyperglue(gifHtml, {
+      '.item': {
+        src: 'data:image/png;base64,' + o.metadata.base64
+      },
+      '.tile-inner': {
+        href: 'images/' + o.filename
+      },
+      '.tile': {
+        'data-key': o.key
+      }
+    })
+    this.queue(e.innerHTML)
   })
 
   var hs = hyperstream({
