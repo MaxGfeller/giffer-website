@@ -54,7 +54,14 @@
             image: {
               titleSrc: function(item) {
                 var link = item.el.attr('data-url');
-                return '<a href="'+link+'">Source</a>';
+                var s = document.createElement('span');
+                var a = document.createElement('a');
+                s.appendChild(a);
+                a.textContent = 'Show source';
+                a.onclick = function() {
+                  s.textContent = link;
+                };
+                return s;
               }
             },
             gallery: {
