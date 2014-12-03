@@ -78,7 +78,8 @@ function createGifStream(start) {
         src: 'data:image/png;base64,' + o.metadata.base64
       },
       '.tile-inner': {
-        href: 'images/' + o.filename
+        href: 'images/' + o.filename,
+        'data-url': o.metadata.origin
       },
       '.tile': {
         'data-key': o.key
