@@ -13,6 +13,7 @@
 <body>
     <div class="page-header">
         <h1>Gifster <small>All the funny gifs</small></h1>
+        <div class="fb-like-box" data-href="https://www.facebook.com/Gifster.io" data-colorscheme="light" data-show-faces="false" data-header="true" data-stream="false" data-show-border="true"></div>
     </div>
     <div id="displayNewGifs" style="display: none;" class="alert alert-info" role="alert">
         <a href="javascript:void(0)" class="alert-link">Display new GIFs!</a>
@@ -22,6 +23,15 @@
       <div class="ftg-items" id="gifs">
       </div>
     </div>
+
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/de_DE/sdk.js#xfbml=1&appId=367410483342995&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
     <script type="text/javascript" src="assets/jquery-latest.min.js"></script>
     <script type="text/javascript" src="assets/jquery.magnific-popup.min.js"></script>
