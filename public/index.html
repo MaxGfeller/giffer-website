@@ -49,6 +49,18 @@
     </script>
     <script type="text/javascript" charset="utf-8">
       $(window).load(function() {
+        var parts = window.location.href.split('#')
+        if (parts.length > 1) {
+          var queryString = parts[1];
+          var img = document.createElement('a')
+          img.href = 'images/' + queryString + '.gif'
+          // img.style.display = 'none'
+          document.body.appendChild(img)
+          $(img).magnificPopup({ type:'image' });
+          $(img).click()
+          img.style.display = 'none'
+        }
+
         var k = $('#gifs .tile:last-child').data('key');
         $('#gallery').finalTilesGallery({
           autoLoadURL: '/page?k=' + k,
